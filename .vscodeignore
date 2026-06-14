@@ -1,0 +1,7 @@
+.vscode/**
+docs/**
+.git/**
+.gitignore
+jsconfig.json
+CLAUDE.md
+**/*.map

@@ -1,0 +1,126 @@
+{
+  "name": "touch-grass",
+  "displayName": "Touch Grass",
+  "description": "Hourly break reminders with a calm pixel-art meadow. Rest your eyes, then get back to it.",
+  "version": "0.1.0",
+  "publisher": "mario",
+  "author": "mariotmc",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mariotmc/touch-grass.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mariotmc/touch-grass/issues"
+  },
+  "homepage": "https://github.com/mariotmc/touch-grass#readme",
+  "icon": "media/icon.png",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "break",
+    "pomodoro",
+    "health",
+    "eye strain",
+    "reminder",
+    "pixel art"
+  ],
+  "main": "./src/extension.js",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "touchGrass.takeBreakNow",
+        "title": "Take a Break Now",
+        "category": "Touch Grass"
+      },
+      {
+        "command": "touchGrass.postpone",
+        "title": "Postpone Break",
+        "category": "Touch Grass"
+      },
+      {
+        "command": "touchGrass.skip",
+        "title": "Skip Break",
+        "category": "Touch Grass"
+      },
+      {
+        "command": "touchGrass.reset",
+        "title": "Reset Interval Timer",
+        "category": "Touch Grass"
+      },
+      {
+        "command": "touchGrass.togglePause",
+        "title": "Pause / Resume Reminders",
+        "category": "Touch Grass"
+      },
+      {
+        "command": "touchGrass.openMenu",
+        "title": "Open Menu",
+        "category": "Touch Grass"
+      }
+    ],
+    "configuration": {
+      "title": "Touch Grass",
+      "properties": {
+        "touchGrass.enabled": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Master switch for break reminders. Turn off to disable Touch Grass entirely."
+        },
+        "touchGrass.startAutomatically": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Start counting down as soon as VS Code finishes loading. If off, Touch Grass starts paused and you resume it from the menu."
+        },
+        "touchGrass.intervalMinutes": {
+          "type": "number",
+          "default": 60,
+          "minimum": 1,
+          "maximum": 600,
+          "markdownDescription": "Minutes of work between breaks."
+        },
+        "touchGrass.breakDurationSeconds": {
+          "type": "number",
+          "default": 300,
+          "minimum": 5,
+          "maximum": 3600,
+          "markdownDescription": "How long each break lasts, in seconds (default 300 = 5 minutes)."
+        },
+        "touchGrass.postponeMinutes": {
+          "type": "number",
+          "default": 5,
+          "minimum": 1,
+          "maximum": 120,
+          "markdownDescription": "How many minutes the **Postpone** button delays a break."
+        },
+        "touchGrass.autoEndBreak": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Automatically close the break view when its countdown reaches zero. If off, the view stays open until you click Skip."
+        },
+        "touchGrass.maximizeOnBreak": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "During a break, maximize the editor and hide the side bar so the meadow fills the editor area, then restore your layout afterwards. Turn off to keep the break as a normal tab."
+        },
+        "touchGrass.showStatusBar": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Show a live countdown to the next break in the status bar. Click it for the Touch Grass menu."
+        },
+        "touchGrass.reducedMotion": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "Slow the animation and reduce movement for a calmer, less distracting scene."
+        }
+      }
+    }
+  }
+}
