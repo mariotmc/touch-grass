@@ -60,7 +60,7 @@ Step 2 is the same command everywhere; the only difference is making sure the
   `PATH` once you've opened a folder in VS Code from that shell at least once.
 
 > No Node? Skip the build and symlink the repo into your extensions folder
-> instead (macOS/Linux/WSL): `ln -s "$PWD" ~/.vscode/extensions/mario.touch-grass-0.1.0`
+> instead (macOS/Linux/WSL): `ln -s "$PWD" ~/.vscode/extensions/mariotmc.touch-grass-0.1.0`
 > — use `~/.vscode-server/extensions` on WSL/Linux — then reload VS Code.
 
 ## Develop
