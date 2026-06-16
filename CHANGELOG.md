@@ -9,6 +9,8 @@ Initial release.
   meadow with drifting clouds, flowers, and butterflies, whose palette
   follows the local time of day (dawn / day / sunset / dusk / starry night
   with a crescent moon).
+- Optionally pulls the VS Code window to the foreground when a break starts,
+  so it won't slip by while you're focused on another app (`focusWindowOnBreak`).
 - Live countdown + progress bar during the break; **Skip** and **Postpone**
   always available (Esc also skips).
 - Status-bar countdown to the next break; click for a quick menu

@@ -28,6 +28,7 @@ function getConfig() {
     maximizeOnBreak: c.get("maximizeOnBreak", true),
     showStatusBar: c.get("showStatusBar", true),
     reducedMotion: c.get("reducedMotion", false),
+    focusWindowOnBreak: c.get("focusWindowOnBreak", true),
   };
 }
 

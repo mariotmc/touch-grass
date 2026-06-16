@@ -119,6 +119,11 @@
           "type": "boolean",
           "default": false,
           "markdownDescription": "Slow the animation and reduce movement for a calmer, less distracting scene."
+        },
+        "touchGrass.focusWindowOnBreak": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "When a break starts, bring the VS Code window to the foreground so a break can't slip by while you're in another app. Best-effort: reliable on macOS; on Windows/Linux/WSL the OS may only flash the taskbar instead of focusing."
         }
       }
     }

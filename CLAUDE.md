@@ -15,8 +15,8 @@ tried and deliberately removed — don't reintroduce them without being asked.)
   declares no `dependencies`/`devDependencies`; `main` points straight at
   `src/extension.js`, which VS Code's bundled runtime executes as-is. Do **not**
   add npm packages, TypeScript, or a bundler without explicit instruction. The
-  only `require()`s are `require('vscode')` (ambient, provided by the host) and
-  relative files.
+  only `require()`s are `require('vscode')` (ambient, provided by the host), Node
+  built-ins (`child_process`, `fs`) in `focusWindow.js`, and relative files.
 - **Node/npm are unavailable on this machine** (nvm is broken, network is
   blocked). You cannot `npm install`, run `node`, or package a `.vsix` here.
   Syntax-check with the command below, then have the user run it via F5.
@@ -29,7 +29,7 @@ globals don't matter):
 
 ```bash
 JSC="/System/Library/Frameworks/JavaScriptCore.framework/Versions/Current/Helpers/jsc"
-"$JSC" -e 'var R="'"$PWD"'", fs=["src/extension.js","src/controller.js","src/config.js","src/statusBar.js","src/menu.js","src/breakPanel.js","media/break.js","media/sprites.js"];
+"$JSC" -e 'var R="'"$PWD"'", fs=["src/extension.js","src/controller.js","src/config.js","src/statusBar.js","src/menu.js","src/breakPanel.js","src/focusWindow.js","media/break.js","media/sprites.js"];
 for (var i=0;i<fs.length;i++){try{checkSyntax(R+"/"+fs[i]);print("OK   "+fs[i])}catch(e){print("ERR  "+fs[i]+": "+e)}}'
 ```
 
@@ -64,6 +64,9 @@ Two sides talking over the VS Code webview message bridge.
 - `menu.js` — the status-bar quick-pick (`showMenu`).
 - `breakPanel.js` — owns the single webview panel: builds the CSP'd HTML, runs the
   message protocol, and implements **focus mode** (maximize editor + hide sidebar).
+- `focusWindow.js` — best-effort: shells out per-OS (osascript / PowerShell /
+  wmctrl) to bring the VS Code window to the foreground when a break starts (no
+  VS Code API for it); silent on failure. Distinct from "focus mode" above.
 - `extension.js` — `activate()`: registers the `touchGrass.*` commands and wires
   them to the controller.
 

@@ -6,6 +6,7 @@ const { getConfig, SECTION } = require("./config");
 const { StatusBar } = require("./statusBar");
 const { BreakPanel } = require("./breakPanel");
 const { showMenu } = require("./menu");
+const { focusWindow } = require("./focusWindow");
 
 /**
  * @typedef {"running" | "breaking" | "paused"} State
@@ -103,6 +104,7 @@ class TouchGrassController {
     this.breakEndsAt = Date.now() + this.cfg.breakDurationSeconds * 1000;
     this.nextBreakAt = null;
     this.panel.open(this.breakPayload());
+    if (this.cfg.focusWindowOnBreak) focusWindow();
     this.render();
   }
 
