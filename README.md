@@ -45,7 +45,7 @@ code --install-extension touch-grass-0.1.0.vsix
 
 Restart VS Code (or run **Developer: Reload Window**). The countdown appears in
 the status bar and the first break fires on schedule — it auto-starts on every
-launch. To update later: `git pull`, re-run step 1, install the new `.vsix`.
+launch.
 
 Step 2 is the same command everywhere; the only difference is making sure the
 `code` CLI is found:
@@ -59,9 +59,36 @@ Step 2 is the same command everywhere; the only difference is making sure the
   (`~/.vscode-server/extensions`) and loads in every window there. `code` is on
   `PATH` once you've opened a folder in VS Code from that shell at least once.
 
-> No Node? Skip the build and symlink the repo into your extensions folder
-> instead (macOS/Linux/WSL): `ln -s "$PWD" ~/.vscode/extensions/mariotmc.touch-grass-0.1.0`
-> — use `~/.vscode-server/extensions` on WSL/Linux — then reload VS Code.
+## Updating
+
+Local installs don't auto-update (no Marketplace), so after you push changes you
+pull them onto each machine yourself.
+
+- **Symlink the repo (recommended — no rebuilding).** Install once by linking the
+  repo into your extensions folder; after that, updating is just `git pull` +
+  **Developer: Reload Window**, since VS Code loads the live files. No Node needed
+  for this path.
+
+  ```bash
+  # macOS / Linux / WSL  (use ~/.vscode-server/extensions on WSL & SSH remotes)
+  ln -s "$PWD" ~/.vscode/extensions/mariotmc.touch-grass-0.1.0
+  ```
+
+  Native Windows, in an elevated / Developer-Mode terminal:
+
+  ```bat
+  mklink /D "%USERPROFILE%\.vscode\extensions\mariotmc.touch-grass-0.1.0" "C:\path\to\touch-grass"
+  ```
+
+  Already installed the `.vsix`? Remove it first so the two don't clash:
+  `code --uninstall-extension mariotmc.touch-grass`.
+
+- **Or rebuild the `.vsix`.** Repeat the build and reinstall with `--force` — the
+  version doesn't change on every push, so without it VS Code skips the reinstall:
+
+  ```bash
+  git pull && npx @vscode/vsce package && code --install-extension touch-grass-0.1.0.vsix --force
+  ```
 
 ## Develop
 
