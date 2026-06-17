@@ -124,6 +124,11 @@
           "type": "boolean",
           "default": true,
           "markdownDescription": "When a break starts, get your attention so it isn't missed while you're in another app: brings VS Code to the front on macOS, flashes its taskbar button on Windows/WSL, and shows a system notification on Linux. Best-effort."
+        },
+        "touchGrass.syncAcrossWindows": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "Share one break schedule across all open VS Code windows: a newly opened window joins the current countdown instead of starting fresh, and breaks/postpones/skips stay in sync. Pause stays per-window. Experimental."
         }
       }
     }

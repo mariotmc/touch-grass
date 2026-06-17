@@ -71,6 +71,8 @@ Two sides talking over the VS Code webview message bridge.
   mode" above.
 - `extension.js` — `activate()`: registers the `touchGrass.*` commands and wires
   them to the controller.
+- `sync.js` — best-effort read/write of the shared break-schedule file (one JSON
+  under the extension's global storage) for the opt-in cross-window sync.
 
 **Webview — `media/` (browser globals, no bundler, no network):**
 
@@ -90,6 +92,11 @@ zero).
 
 ## Invariants to preserve
 
+- **Cross-window sync (opt-in, `syncAcrossWindows`).** All windows share one
+  schedule file; `breakEndsAt` is *derived from the scheduled start* so every
+  window converges on the same break. `pullSync`/`publishSync` are gated and
+  best-effort (never break the timer), and a paused window neither reads nor
+  writes — pause is per-window.
 - **Webview drawing rules.** Plants draw in painter's order sorted by `baseY`
   (lower on screen overdraws what's behind).
 - **Auto-end timing.** At zero the webview shows a ~2.2s "Welcome back" farewell
