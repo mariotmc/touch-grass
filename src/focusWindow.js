@@ -10,8 +10,9 @@ const fs = require("fs");
  * while you're working in another app. VS Code has no API for cross-app
  * attention, so we shell out per-OS:
  *   - macOS: bring the window to the front (`osascript … activate`) — reliable.
- *   - Windows / WSL: try to foreground, then pop a tray notification. Windows
- *     blocks focus-stealing, so the notification is the part you actually see.
+ *   - Windows / WSL: try to foreground, then flash the taskbar button
+ *     (`FlashWindowEx`, the OS-blessed "needs attention" blink) until VS Code is
+ *     focused — Windows blocks outright focus-stealing.
  *   - Linux: try `wmctrl` to foreground, plus `notify-send`.
  * Always silent on failure — the break runs regardless.
  */
@@ -31,19 +32,19 @@ function isWsl() {
   }
 }
 
-// Windows PowerShell (`powershell.exe` = 5.1; reached from WSL via interop): a
-// best-effort foreground, then a tray-balloon notification (shown as a toast on
-// Win10/11). A WinForms balloon needs no registered AppID, unlike a WinRT toast.
-const PS_ALERT = [
-  "$ErrorActionPreference='SilentlyContinue';",
-  "$p=Get-Process Code,'Code - Insiders'|?{$_.MainWindowHandle -ne 0}|Select -First 1;",
-  "if($p){(New-Object -ComObject WScript.Shell).AppActivate($p.Id)|Out-Null};",
-  "Add-Type -AssemblyName System.Windows.Forms,System.Drawing;",
-  "$n=New-Object System.Windows.Forms.NotifyIcon;",
-  "$n.Icon=[System.Drawing.SystemIcons]::Information;$n.Visible=$true;",
-  `$n.ShowBalloonTip(8000,'${TITLE}','${BODY}',[System.Windows.Forms.ToolTipIcon]::Info);`,
-  "Start-Sleep -Milliseconds 8000;$n.Dispose()",
-].join("");
+// Foreground attempt, then flash the VS Code taskbar button until it's focused
+// (FLASHW_ALL | FLASHW_TIMERNOFG = 0xF). powershell.exe is Windows PowerShell
+// 5.1, reached from WSL via interop (the window lives on the Windows side).
+// Passed as base64 (-EncodedCommand) so the embedded C# survives intact.
+const PS_FLASH = `
+$ErrorActionPreference='SilentlyContinue'
+$p = Get-Process Code,'Code - Insiders' | Where-Object MainWindowHandle -ne 0 | Select-Object -First 1
+if ($p) {
+  (New-Object -ComObject WScript.Shell).AppActivate($p.Id) | Out-Null
+  Add-Type -TypeDefinition 'using System; using System.Runtime.InteropServices; public static class TGFlash { [StructLayout(LayoutKind.Sequential)] public struct FW { public uint cbSize; public IntPtr hwnd; public uint dwFlags; public uint uCount; public uint dwTimeout; } [DllImport("user32.dll")] public static extern bool FlashWindowEx(ref FW pwfi); public static void Go(IntPtr h) { FW f = new FW(); f.cbSize = (uint)Marshal.SizeOf(f); f.hwnd = h; f.dwFlags = 0xF; f.uCount = uint.MaxValue; f.dwTimeout = 0; FlashWindowEx(ref f); } }'
+  [TGFlash]::Go($p.MainWindowHandle)
+}`;
+const PS_FLASH_B64 = Buffer.from(PS_FLASH, "utf16le").toString("base64");
 
 function focusWindow() {
   try {
@@ -53,7 +54,7 @@ function focusWindow() {
     } else if (process.platform === "win32" || isWsl()) {
       execFile(
         "powershell.exe",
-        ["-NoProfile", "-NonInteractive", "-WindowStyle", "Hidden", "-Command", PS_ALERT],
+        ["-NoProfile", "-NonInteractive", "-WindowStyle", "Hidden", "-EncodedCommand", PS_FLASH_B64],
         opts,
         ignore
       );

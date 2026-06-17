@@ -137,7 +137,7 @@ Search **"Touch Grass"** in Settings. Defaults in parentheses.
 | `touchGrass.maximizeOnBreak` | `true` | Maximize the editor + hide the side bar during a break, then restore. |
 | `touchGrass.showStatusBar` | `true` | Show the countdown in the status bar. |
 | `touchGrass.reducedMotion` | `false` | Calmer, slower animation. |
-| `touchGrass.focusWindowOnBreak` | `true` | Get your attention when a break starts so you don't miss it — foregrounds VS Code on macOS, shows a system notification on Windows/Linux/WSL. Best-effort. |
+| `touchGrass.focusWindowOnBreak` | `true` | Get your attention when a break starts so you don't miss it — foregrounds VS Code (macOS), flashes the taskbar button (Windows/WSL), or shows a notification (Linux). Best-effort. |
 
 ## How it works
 

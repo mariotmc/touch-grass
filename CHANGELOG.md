@@ -10,8 +10,8 @@ Initial release.
   follows the local time of day (dawn / day / sunset / dusk / starry night
   with a crescent moon).
 - Optionally alerts you when a break starts so it isn't missed while you're in
-  another app — foregrounds VS Code on macOS, shows a system notification on
-  Windows/Linux/WSL (`focusWindowOnBreak`).
+  another app — foregrounds VS Code on macOS, flashes the taskbar button on
+  Windows/WSL, shows a notification on Linux (`focusWindowOnBreak`).
 - Live countdown + progress bar during the break; **Skip** and **Postpone**
   always available (Esc also skips).
 - Status-bar countdown to the next break; click for a quick menu

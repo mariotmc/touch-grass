@@ -65,9 +65,10 @@ Two sides talking over the VS Code webview message bridge.
 - `breakPanel.js` — owns the single webview panel: builds the CSP'd HTML, runs the
   message protocol, and implements **focus mode** (maximize editor + hide sidebar).
 - `focusWindow.js` — best-effort "you have a break" alert when one starts: shells
-  out per-OS — `osascript` activate on macOS (foregrounds), a PowerShell tray
-  notification on Windows/WSL (the OS blocks focus-stealing), `wmctrl` +
-  `notify-send` on Linux. Silent on failure. Distinct from "focus mode" above.
+  out per-OS — `osascript` activate on macOS (foregrounds), `FlashWindowEx` via
+  PowerShell to flash the taskbar on Windows/WSL (the OS blocks focus-stealing),
+  `wmctrl` + `notify-send` on Linux. Silent on failure. Distinct from "focus
+  mode" above.
 - `extension.js` — `activate()`: registers the `touchGrass.*` commands and wires
   them to the controller.
 
