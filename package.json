@@ -123,7 +123,7 @@
         "touchGrass.focusWindowOnBreak": {
           "type": "boolean",
           "default": true,
-          "markdownDescription": "When a break starts, bring the VS Code window to the foreground so a break can't slip by while you're in another app. Best-effort: reliable on macOS; on Windows/Linux/WSL the OS may only flash the taskbar instead of focusing."
+          "markdownDescription": "When a break starts, get your attention so it isn't missed while you're in another app: brings VS Code to the front on macOS, and shows a system notification on Windows/Linux/WSL (where the OS blocks focus-stealing). Best-effort."
         }
       }
     }
