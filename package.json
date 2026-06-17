@@ -127,8 +127,8 @@
         },
         "touchGrass.syncAcrossWindows": {
           "type": "boolean",
-          "default": false,
-          "markdownDescription": "Share one break schedule across all open VS Code windows: a newly opened window joins the current countdown instead of starting fresh, and breaks/postpones/skips stay in sync. Pause stays per-window. Experimental."
+          "default": true,
+          "markdownDescription": "Share one break schedule across all open VS Code windows: a newly opened window joins the current countdown instead of starting fresh, and breaks/postpones/skips stay in sync. Pause stays per-window. Turn off to give each window its own independent timer."
         }
       }
     }

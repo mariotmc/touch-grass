@@ -29,7 +29,7 @@ function getConfig() {
     showStatusBar: c.get("showStatusBar", true),
     reducedMotion: c.get("reducedMotion", false),
     focusWindowOnBreak: c.get("focusWindowOnBreak", true),
-    syncAcrossWindows: c.get("syncAcrossWindows", false),
+    syncAcrossWindows: c.get("syncAcrossWindows", true),
   };
 }
 

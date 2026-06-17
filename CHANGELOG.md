@@ -12,9 +12,9 @@ Initial release.
 - Optionally alerts you when a break starts so it isn't missed while you're in
   another app — foregrounds VS Code on macOS, flashes the taskbar button on
   Windows/WSL, shows a notification on Linux (`focusWindowOnBreak`).
-- Optional cross-window sync (`syncAcrossWindows`): share one break schedule
-  across every open VS Code window, so a new window joins the current countdown
-  instead of starting its own.
+- Cross-window sync (`syncAcrossWindows`, on by default): all open VS Code
+  windows share one break schedule, so a new window joins the current countdown
+  and breaks/postpones/skips stay in step. Pause is per-window.
 - Live countdown + progress bar during the break; **Skip** and **Postpone**
   always available (Esc also skips).
 - Status-bar countdown to the next break; click for a quick menu
