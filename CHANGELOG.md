@@ -14,7 +14,8 @@ Initial release.
   Windows/WSL, shows a notification on Linux (`focusWindowOnBreak`).
 - Cross-window sync (`syncAcrossWindows`, on by default): all open VS Code
   windows share one break schedule, so a new window joins the current countdown
-  and breaks/postpones/skips stay in step. Pause is per-window.
+  and every manual action — take a break, postpone, skip, reset, pause/resume —
+  stays in step.
 - Live countdown + progress bar during the break; **Skip** and **Postpone**
   always available (Esc also skips).
 - Status-bar countdown to the next break; click for a quick menu

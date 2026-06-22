@@ -138,7 +138,7 @@ Search **"Touch Grass"** in Settings. Defaults in parentheses.
 | `touchGrass.showStatusBar` | `true` | Show the countdown in the status bar. |
 | `touchGrass.reducedMotion` | `false` | Calmer, slower animation. |
 | `touchGrass.focusWindowOnBreak` | `true` | Get your attention when a break starts so you don't miss it — foregrounds VS Code (macOS), flashes the taskbar button (Windows/WSL), or shows a notification (Linux). Best-effort. |
-| `touchGrass.syncAcrossWindows` | `true` | Share one break schedule across all open VS Code windows — a new window joins the current countdown, and breaks/postpones/skips sync. Pause stays per-window. |
+| `touchGrass.syncAcrossWindows` | `true` | Share one break schedule across all open VS Code windows — a new window joins the current countdown, and every manual action (take a break, postpone, skip, reset, pause/resume) syncs. |
 
 ## How it works
 
@@ -159,7 +159,7 @@ char-grids in [media/sprites.js](media/sprites.js).
 ## Known limitations
 
 - **Multiple windows** share one break schedule by default
-  (`syncAcrossWindows`), so they break together; pause is per-window. Turn the
+  (`syncAcrossWindows`), so they break, pause, and resume together. Turn the
   setting off to give each window its own independent timer.
 - VS Code can't lock the OS, so the "takeover" is a focused, maximized,
   dismissible editor tab — not a hard screen lock.

@@ -63,7 +63,12 @@ class TouchGrassController {
     if (!this.cfg.enabled || !this.cfg.startAutomatically) {
       this.state = "paused";
     } else {
-      this.start();
+      // Join the shared state if other windows have one (running, breaking, or
+      // paused); otherwise start a fresh schedule.
+      const shared = this.cfg.syncAcrossWindows ? readSchedule(this.syncPath) : null;
+      if (!(shared && this.applyShared(shared))) {
+        this.start();
+      }
     }
     this.render();
   }
@@ -97,8 +102,9 @@ class TouchGrassController {
   start() {
     this.state = "running";
     this.breakEndsAt = null;
+    // Resuming means run: adopt an active shared schedule, but not a paused one.
     const shared = this.cfg.syncAcrossWindows && this.cfg.enabled ? readSchedule(this.syncPath) : null;
-    if (!(shared && this.applyShared(shared))) {
+    if (!(shared && !shared.paused && this.applyShared(shared))) {
       this.scheduleNext();
     }
     this.render();
@@ -181,6 +187,12 @@ class TouchGrassController {
       this.start();
     } else {
       this.pause();
+      // An explicit pause is the one paused state we broadcast — a window that's
+      // merely disabled or not-auto-started stays quiet so it can't pause others.
+      if (this.cfg.syncAcrossWindows && this.cfg.enabled) {
+        this.lastSync = this.snapshotKey();
+        writeSchedule(this.syncPath, { nextBreakAt: null, breakEndsAt: null, paused: true });
+      }
     }
   }
 
@@ -250,6 +262,16 @@ class TouchGrassController {
    * @param {any} s @returns {boolean}
    */
   applyShared(s) {
+    if (s && s.paused === true) {
+      if (this.state !== "paused") {
+        if (this.state === "breaking") this.panel.close();
+        this.state = "paused";
+        this.nextBreakAt = null;
+        this.breakEndsAt = null;
+      }
+      this.lastSync = this.snapshotKey();
+      return true;
+    }
     const nb = s && typeof s.nextBreakAt === "number" ? s.nextBreakAt : null;
     const be = s && typeof s.breakEndsAt === "number" ? s.breakEndsAt : null;
     if (be !== null && be > Date.now() - BREAK_END_GRACE_MS) {
@@ -275,15 +297,16 @@ class TouchGrassController {
     return false;
   }
 
-  /** Pull the shared schedule each tick (skipped while paused, disabled, or sync off). */
+  /** Pull the shared schedule each tick (skipped while disabled or sync off). */
   pullSync() {
-    if (!this.cfg.syncAcrossWindows || !this.cfg.enabled || this.state === "paused") return;
+    if (!this.cfg.syncAcrossWindows || !this.cfg.enabled) return;
     const s = readSchedule(this.syncPath);
     if (s) this.applyShared(s);
   }
 
-  /** Publish our active schedule so other windows adopt it. Paused isn't shared —
-   *  pause stays per-window. No-op when unchanged, paused, disabled, or sync off. */
+  /** Publish our active schedule so other windows adopt it. The paused state is
+   *  broadcast separately (see togglePause). No-op when unchanged, paused,
+   *  disabled, or sync off. */
   publishSync() {
     if (!this.cfg.syncAcrossWindows || !this.cfg.enabled) return;
     if (this.state !== "running" && this.state !== "breaking") return;
