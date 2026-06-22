@@ -111,9 +111,7 @@ class TouchGrassController {
   beginBreak() {
     if (this.state === "breaking") return;
     this.state = "breaking";
-    // Derived from the scheduled start so every synced window computes the
-    // identical breakEndsAt and counts down together.
-    this.breakEndsAt = (this.nextBreakAt ?? Date.now()) + this.cfg.breakDurationSeconds * 1000;
+    this.breakEndsAt = Date.now() + this.cfg.breakDurationSeconds * 1000;
     this.nextBreakAt = null;
     this.panel.open(this.breakPayload());
     if (this.cfg.focusWindowOnBreak) focusWindow();

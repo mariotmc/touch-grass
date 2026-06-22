@@ -93,10 +93,10 @@ zero).
 ## Invariants to preserve
 
 - **Cross-window sync (`syncAcrossWindows`, default on).** All windows share one
-  schedule file; `breakEndsAt` is *derived from the scheduled start* so every
-  window converges on the same break. `pullSync`/`publishSync` are gated and
-  best-effort (never break the timer), and a paused window neither reads nor
-  writes — pause is per-window.
+  schedule file; the first window to start a break publishes `breakEndsAt` and the
+  others adopt it (rather than recomputing from `now`), so they converge on the
+  same break. `pullSync`/`publishSync` are gated and best-effort (never break the
+  timer), and a paused window neither reads nor writes — pause is per-window.
 - **Webview drawing rules.** Plants draw in painter's order sorted by `baseY`
   (lower on screen overdraws what's behind).
 - **Auto-end timing.** At zero the webview shows a ~2.2s "Welcome back" farewell
