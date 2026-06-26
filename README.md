@@ -159,8 +159,11 @@ char-grids in [media/sprites.js](media/sprites.js).
 ## Known limitations
 
 - **Multiple windows** share one break schedule by default
-  (`syncAcrossWindows`), so they break, pause, and resume together. Turn the
-  setting off to give each window its own independent timer.
+  (`syncAcrossWindows`), so they break, pause, and resume together — across
+  windows in the *same* environment. The shared state lives in per-environment
+  extension storage, so it won't bridge a local window and a WSL/SSH-remote one,
+  and every window must run the same installed build. Turn the setting off for
+  independent per-window timers.
 - VS Code can't lock the OS, so the "takeover" is a focused, maximized,
   dismissible editor tab — not a hard screen lock.
 

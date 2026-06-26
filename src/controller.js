@@ -285,7 +285,11 @@ class TouchGrassController {
       else this.panel.open(this.breakPayload());
       return true;
     }
-    if (nb !== null) {
+    // Only adopt a future break time. A nextBreakAt already in the past is a
+    // stale schedule from a closed session — adopting it would fire a break the
+    // instant a window opens after a restart (a window still fires its own
+    // genuinely-due break via the tick, so nothing is lost).
+    if (nb !== null && nb > Date.now()) {
       if (this.state === "running" && this.nextBreakAt === nb) return true;
       if (this.state === "breaking") this.panel.close();
       this.state = "running";
